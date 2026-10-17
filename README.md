@@ -1,7 +1,7 @@
 <p align="center"><img src="assets/noctra-link.png" width="150" alt="Noctra Link icon"></p>
 
 <h1 align="center">Noctra </h1>
-<p align="center"><strong>Your PS4. On your PC.</strong><br>By Solitary</p>
+<p align="center"><strong> Play PS4 On your PC.</strong><br>By Solitary</p>
 <p align="center">Windows x64 · Local streaming companion · English setup guide</p>
 
 Noctra Link is a small Windows launcher and setup companion for **chiaki-ng**. It gives you a branded entry point, a local Account-ID converter, and a practical setup guide. The original chiaki-ng client handles console registration, video, audio, and controls.
