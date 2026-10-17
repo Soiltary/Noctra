@@ -1,0 +1,13 @@
+/build/
+/dist/
+/engine/
+/.cache/
+*.obj
+*.o
+*.res
+*.pdb
+*.exe
+*.zip
+*.tmp
+.DS_Store
+Thumbs.db

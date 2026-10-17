@@ -1,0 +1,31 @@
+#include <windows.h>
+1 ICON "noctra-link.ico"
+1 RT_MANIFEST "app.manifest"
+1 VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0
+BEGIN
+ BLOCK "StringFileInfo"
+ BEGIN
+  BLOCK "040904b0"
+  BEGIN
+   VALUE "CompanyName", "Solitary\0"
+   VALUE "FileDescription", "Noctra Link - PS4 streaming companion\0"
+   VALUE "FileVersion", "1.0.0\0"
+   VALUE "InternalName", "NoctraLink\0"
+   VALUE "OriginalFilename", "NoctraLink.exe\0"
+   VALUE "ProductName", "Noctra Link\0"
+   VALUE "ProductVersion", "1.0.0\0"
+   VALUE "LegalCopyright", "Copyright 2026 Solitary. MIT licensed launcher.\0"
+  END
+ END
+ BLOCK "VarFileInfo"
+ BEGIN
+  VALUE "Translation", 0x0409, 1200
+ END
+END

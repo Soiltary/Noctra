@@ -1,0 +1,53 @@
+name: Windows build and release
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -A x64
+      - name: Build
+        run: cmake --build build --config Release
+      - name: Test Account-ID conversion
+        run: ctest --test-dir build -C Release --output-on-failure
+      - name: Package launcher
+        env:
+          SOURCE_REF_TYPE: ${{ github.ref_type }}
+          SOURCE_REF_NAME: ${{ github.ref_name }}
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path src/main.c -Pattern '#define APP_VERSION L"([0-9.]+)"').Matches.Groups[1].Value
+          if ($env:SOURCE_REF_TYPE -eq 'tag' -and $env:SOURCE_REF_NAME -ne "v$version") { throw 'Tag and source version do not match.' }
+          ./scripts/Package.ps1 -Version $version
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Noctra-Link-Windows-x64
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: Noctra-Link-Windows-x64
+          path: release-files
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" release-files/*.zip release-files/SHA256SUMS.txt --verify-tag --title "Noctra Link $RELEASE_TAG" --notes-file docs/RELEASE_NOTES.md
