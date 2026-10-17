@@ -5,7 +5,7 @@ Noctra Link برنامج Windows لتشغيل عميل chiaki-ng وبث صورة
 ## روابط المشروع
 
 - [المشروع والكود](https://github.com/Soiltary/Noctra)
-- [الإصدار 1.0.0 وملفات التحميل](https://github.com/Soiltary/Noctra/releases/tag/v1.0.0)
+- [الإصدار 1.0.1 وملفات التحميل](https://github.com/Soiltary/Noctra/releases/tag/v1.0.1)
 - [الدليل الإنجليزي داخل الحزمة](QUICKSTART.html)
 - [الإبلاغ عن مشكلة](https://github.com/Soiltary/Noctra/issues)
 
@@ -13,8 +13,8 @@ Noctra Link برنامج Windows لتشغيل عميل chiaki-ng وبث صورة
 
 Windows 10 أو 11 بنواة x64، وجهاز PS4 مفعّل عليه Remote Play، والكمبيوتر والجهاز على الراوتر نفسه. يفضّل الاتصال بسلك للشروع في التجربة. تحتاج اتصالًا بالإنترنت لتنزيل محرك chiaki-ng في أول تشغيل.
 
-1. افتح صفحة الإصدار وحمّل `Noctra-Link-v1.0.0-Windows-x64.zip` وملف `SHA256SUMS.txt`.
-2. للتحقق من التنزيل استخدم PowerShell: `Get-FileHash .\Noctra-Link-v1.0.0-Windows-x64.zip -Algorithm SHA256`، وقارن النتيجة بملف البصمة.
+1. افتح صفحة الإصدار وحمّل `Noctra-Link-v1.0.1-Windows-x64.zip` وملف `SHA256SUMS.txt`.
+2. للتحقق من التنزيل استخدم PowerShell: `Get-FileHash .\Noctra-Link-v1.0.1-Windows-x64.zip -Algorithm SHA256`، وقارن النتيجة بملف البصمة.
 3. فك ضغط المجلد كاملًا إلى مكان قابل للكتابة. لا تشغّل البرنامج من داخل ZIP ولا تنقل ملف exe وحده.
 4. افتح `NoctraLink.exe` واضغط **Open streaming client**. وافق على تنزيل المحرك الرسمي، بحجم يقارب 97 MB. انتظر اكتمال نافذة الإعداد؛ يفحص السكربت SHA-256 قبل التثبيت.
 5. في المرات التالية يُستخدم المحرك المثبت محليًا. لا تحتاج Python أو صلاحيات مدير.

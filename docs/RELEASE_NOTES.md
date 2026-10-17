@@ -1,10 +1,15 @@
-# Noctra Link 1.0.0
+# Noctra Link 1.0.1
 
 Your PS4. On your PC. A Windows launcher and setup companion by Solitary, powered by the original chiaki-ng client.
 
 ## Download
 
-Download **Noctra-Link-v1.0.0-Windows-x64.zip**, extract the entire folder, and run **NoctraLink.exe**. Open **Setup guide** before pairing your console.
+Download **Noctra-Link-v1.0.1-Windows-x64.zip**, extract the entire folder, and run **NoctraLink.exe**. Open **Setup guide** before pairing your console.
+
+## Fixes in 1.0.1
+
+- Corrected duplicate manifest resources in Windows MSVC builds.
+- Added the [Arabic setup guide](https://github.com/Soiltary/Noctra/blob/main/docs/GUIDE.ar.md).
 
 ## Included
 

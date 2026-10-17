@@ -1,3 +1,9 @@
+# 1.0.1
+
+- Fix duplicate embedded Windows manifest that prevented MSVC release builds.
+- Include the Arabic installation, pairing, and troubleshooting guide.
+- Preserve compiler diagnostics in GitHub Actions annotations.
+
 # Changelog
 
 ## 1.0.0

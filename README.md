@@ -14,7 +14,7 @@ Noctra Link is a small Windows launcher and setup companion for **chiaki-ng**. I
 
 ## Download and run
 
-Open this repository's **[Releases](https://github.com/Soiltary/Noctra/releases)** page and download **Noctra-Link-v1.0.0-Windows-x64.zip**. Extract the **entire** archive into a writable folder, then run **NoctraLink.exe**. On first use, the launcher offers a one-time verified engine download (about 97 MB). Keep the setup window open until it finishes.
+Open this repository's **[Releases](https://github.com/Soiltary/Noctra/releases)** page and download **Noctra-Link-v1.0.1-Windows-x64.zip**. Extract the **entire** archive into a writable folder, then run **NoctraLink.exe**. On first use, the launcher offers a one-time verified engine download (about 97 MB). Keep the setup window open until it finishes.
 
 1. Click **Open streaming client**.
 2. Pair your PS4 in chiaki-ng on first use.
@@ -92,7 +92,7 @@ For a local build with Zig 0.13.0, the resource compiler and `zig cc -target x86
 
 ## Publish on GitHub
 
-See [PUBLISHING.md](docs/PUBLISHING.md). Keep `engine/`, `build/`, and `dist/` out of Git. Commit the source and artwork, then attach the complete Windows ZIP to a GitHub Release. The workflow can also build and publish it when you push a tag such as `v1.0.0`.
+See [PUBLISHING.md](docs/PUBLISHING.md). Keep `engine/`, `build/`, and `dist/` out of Git. Commit the source and artwork, then attach the complete Windows ZIP to a GitHub Release. The workflow can also build and publish it when you push a tag such as `v1.0.1`.
 
 ## Validation and limitations
 

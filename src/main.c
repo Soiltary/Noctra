@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "account_id.h"
 
-#define APP_VERSION L"1.0.0"
+#define APP_VERSION L"1.0.1"
 #define ID_OPEN 101
 #define ID_GUIDE 102
 #define ID_CONVERT 103
@@ -150,7 +150,7 @@ static LRESULT CALLBACK window_proc(HWND window,UINT message,WPARAM wparam,LPARA
         if (HIWORD(wparam)==BN_CLICKED) switch(LOWORD(wparam)) {
             case ID_OPEN:open_client(window);break;case ID_GUIDE:open_guide(window);break;
             case ID_CONVERT:convert_id();break;case ID_COPY:copy_id(window);break;
-            case ID_ABOUT:MessageBoxW(window,L"Noctra Link 1.0.0\nBy Solitary\n\nA Windows launcher and setup companion for chiaki-ng.\nThe unmodified chiaki-ng client provides registration, video, audio and controls.\n\nLauncher: MIT license.\nchiaki-ng: upstream AGPL license with its OpenSSL exception.\nSee THIRD_PARTY_NOTICES.md and licenses/ for details.\n\nIndependent project; not affiliated with Sony or chiaki-ng.",L"About Noctra Link",MB_OK|MB_ICONINFORMATION);break;
+            case ID_ABOUT:MessageBoxW(window,L"Noctra Link 1.0.1\nBy Solitary\n\nA Windows launcher and setup companion for chiaki-ng.\nThe unmodified chiaki-ng client provides registration, video, audio and controls.\n\nLauncher: MIT license.\nchiaki-ng: upstream AGPL license with its OpenSSL exception.\nSee THIRD_PARTY_NOTICES.md and licenses/ for details.\n\nIndependent project; not affiliated with Sony or chiaki-ng.",L"About Noctra Link",MB_OK|MB_ICONINFORMATION);break;
         }
         if (LOWORD(wparam)==201 && HIWORD(wparam)==EN_CHANGE) SetWindowTextW(output,L"");
         return 0;
