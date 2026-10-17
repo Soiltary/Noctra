@@ -1,6 +1,6 @@
-<p align="center"><img src="assets/noctra-link.png" width="150" alt="Noctra icon"></p>
+<p align="center"><img src="assets/noctra-link.png" width="150" alt="Noctra Link icon"></p>
 
-<h1 align="center">Noctra Link</h1>
+<h1 align="center">Noctra </h1>
 <p align="center"><strong>Your PS4. On your PC.</strong><br>By Solitary</p>
 <p align="center">Windows x64 · Local streaming companion · English setup guide</p>
 
