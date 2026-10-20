@@ -14,7 +14,7 @@ Noctra Link is a small Windows launcher and setup companion for **chiaki-ng**. I
 
 ## Download and run
 
-Open this repository's **[Releases](https://github.com/Soiltary/Noctra/releases)** page and download **Noctra-Link-v1.0.1-Windows-x64.zip**. Extract the **entire** archive into a writable folder, then run **NoctraLink.exe**. On first use, the launcher offers a one-time verified engine download (about 97 MB). Keep the setup window open until it finishes.
+Open this repository's **[Releases](https://github.com/Soiltary/Noctra/releases)** page and download **Noctra-Link-v1.1.0-Windows-x64.zip**. Extract the **entire** archive into a writable folder, then run **NoctraLink.exe**. On first use, the launcher offers a one-time verified engine download (about 97 MB). Keep the setup window open until it finishes.
 
 1. Click **Open streaming client**.
 2. Pair your PS4 in chiaki-ng on first use.
@@ -92,7 +92,7 @@ For a local build with Zig 0.13.0, the resource compiler and `zig cc -target x86
 
 ## Publish on GitHub
 
-See [PUBLISHING.md](docs/PUBLISHING.md). Keep `engine/`, `build/`, and `dist/` out of Git. Commit the source and artwork, then attach the complete Windows ZIP to a GitHub Release. The workflow can also build and publish it when you push a tag such as `v1.0.1`.
+See [PUBLISHING.md](docs/PUBLISHING.md). Keep `engine/`, `build/`, and `dist/` out of Git. Commit the source and artwork, then attach the complete Windows ZIP to a GitHub Release. The workflow can also build and publish it when you push a tag such as `v1.1.0`.
 
 ## Validation and limitations
 
@@ -106,3 +106,7 @@ See [VALIDATION.md](docs/VALIDATION.md) for the exact checks performed on the su
 - Original inspiration: [TheDa3/The-Screen-Mirroring](https://github.com/TheDa3/The-Screen-Mirroring), reviewed during exploration. No source code or binaries from that project are included.
 
 Read [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) before redistributing the complete release. Noctra Link is an independent community project and is not affiliated with or endorsed by Sony Interactive Entertainment or the chiaki-ng maintainers. PlayStation and PS4 are trademarks of their respective owners.
+
+## Launcher updates
+
+Noctra 1.1.0 adds Check updates in the launcher, checks at startup and every six hours while running, and asks before installation. Downloads come only from https://noctra-link.soltairy.chatgpt.site/downloads/windows-update.json and its versioned executable, with exact byte-count and SHA-256 verification. The launcher closes and reopens after replacement, retaining a previous binary. The independent streaming engine and its pairing settings are not replaced. Versions before 1.1.0 require one manual download. Future releases that change companion scripts or documents must also provide those changes in a full package; the in-app channel updates the launcher executable. The binary is unsigned. Windows runtime validation is performed by the repository workflow.

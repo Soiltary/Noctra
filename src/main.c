@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "account_id.h"
 
-#define APP_VERSION L"1.0.1"
+#define APP_VERSION L"1.1.0"
 #define ID_OPEN 101
 #define ID_GUIDE 102
 #define ID_CONVERT 103
@@ -25,6 +25,20 @@ static int dpi = 96;
 static wchar_t root_dir[MAX_APP_PATH], engine_path[MAX_APP_PATH];
 static int px(int n) { return MulDiv(n,dpi,96); }
 static void status(const wchar_t *s) { SetWindowTextW(status_label,s); }
+#include <winhttp.h>
+#include <wincrypt.h>
+#include <stdlib.h>
+#include <string.h>
+#include "noctra-json.h"
+#define tr(s) (s)
+#define DONE (WM_APP+2)
+static HWND window;static BOOL busy=FALSE,libraryDialogOpen=FALSE;static int action;
+static void start(int job);
+static char*requestMethod(const wchar_t*method,const wchar_t*path,const char*body,const wchar_t*file,DWORD*code){(void)body;(void)file;*code=0;char*out=NULL;HINTERNET session=WinHttpOpen(L"Noctra Updater",WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,NULL,NULL,0),connection=NULL,request=NULL;if(!session)goto done;WinHttpSetTimeouts(session,5000,5000,15000,15000);connection=WinHttpConnect(session,L"noctra-link.soltairy.chatgpt.site",443,0);if(!connection)goto done;request=WinHttpOpenRequest(connection,method,path,NULL,NULL,NULL,WINHTTP_FLAG_SECURE);if(!request)goto done;DWORD redirects=WINHTTP_OPTION_REDIRECT_POLICY_NEVER;WinHttpSetOption(request,WINHTTP_OPTION_REDIRECT_POLICY,&redirects,sizeof(redirects));if(!WinHttpSendRequest(request,L"Cache-Control: no-cache\r\nPragma: no-cache\r\n",(DWORD)-1L,NULL,0,0,0)||!WinHttpReceiveResponse(request,NULL))goto done;DWORD n=sizeof(*code);if(!WinHttpQueryHeaders(request,WINHTTP_QUERY_STATUS_CODE|WINHTTP_QUERY_FLAG_NUMBER,NULL,code,&n,NULL))goto done;out=(char*)calloc(65536,1);if(!out){*code=0;goto done;}DWORD used=0;for(;;){DWORD got=0;if(!WinHttpReadData(request,out+used,65535-used,&got)){*code=0;break;}if(!got)break;used+=got;if(used>=65535){*code=0;break;}}out[used]=0;done:if(request)WinHttpCloseHandle(request);if(connection)WinHttpCloseHandle(connection);if(session)WinHttpCloseHandle(session);return out;}
+#include "noctra-update.h"
+static DWORD WINAPI updateWorker(void*p){(void)p;if(action==UPDATE_CHECK)updateCheckWorker();else updateDownloadWorker();PostMessageW(window,DONE,0,0);return 0;}
+static void start(int job){if(busy||engine_setup_process)return;action=job;busy=TRUE;updateLayout();HANDLE t=CreateThread(NULL,0,updateWorker,NULL,0,NULL);if(t)CloseHandle(t);else{busy=FALSE;updateLayout();status(L"Could not start update. Please try again.");}}
+
 static int file_exists(const wchar_t *path) {
     DWORD a = GetFileAttributesW(path); return a != INVALID_FILE_ATTRIBUTES && !(a & FILE_ATTRIBUTE_DIRECTORY);
 }
@@ -129,10 +143,11 @@ static void paint(HWND window) {
     label(dc,L"v" APP_VERSION L"  /  Windows x64",30,655,400,22,small_font,RGB(126,146,178));
     EndPaint(window,&ps);
 }
+static void updateSetWindow(HWND h){window=h;}
 static LRESULT CALLBACK window_proc(HWND window,UINT message,WPARAM wparam,LPARAM lparam) {
     switch (message) {
     case WM_CREATE: {
-        BOOL dark=TRUE;DwmSetWindowAttribute(window,20,&dark,sizeof(dark));
+        updateSetWindow(window);BOOL dark=TRUE;DwmSetWindowAttribute(window,20,&dark,sizeof(dark));
         control(window,L"BUTTON",L"Open streaming client",ID_OPEN,30,577,425,46,BS_OWNERDRAW|WS_TABSTOP);
         control(window,L"BUTTON",L"Setup guide",ID_GUIDE,470,577,260,46,BS_OWNERDRAW|WS_TABSTOP);
         input=control(window,L"EDIT",L"",201,49,461,228,40,ES_AUTOHSCROLL|WS_TABSTOP|WS_BORDER);
@@ -140,17 +155,22 @@ static LRESULT CALLBACK window_proc(HWND window,UINT message,WPARAM wparam,LPARA
         SendMessageW(input,EM_SETLIMITTEXT,18,0);SendMessageW(input,WM_SETFONT,(WPARAM)mono_font,TRUE);SendMessageW(output,WM_SETFONT,(WPARAM)mono_font,TRUE);
         control(window,L"BUTTON",L"Convert",ID_CONVERT,289,461,88,40,BS_OWNERDRAW|WS_TABSTOP);
         control(window,L"BUTTON",L"Copy",ID_COPY,611,461,99,40,BS_OWNERDRAW|WS_TABSTOP);
-        control(window,L"BUTTON",L"About",ID_ABOUT,637,648,93,31,BS_OWNERDRAW|WS_TABSTOP);
+        updateButton=control(window,L"BUTTON",L"Check updates",UPDATE_CHECK,460,648,164,31,BS_OWNERDRAW|WS_TABSTOP);
+        control(window,L"BUTTON",L"About",ID_ABOUT,637,648,93,31,BS_OWNERDRAW|WS_TABSTOP);SetTimer(window,2,21600000,NULL);
         status_label=control(window,L"STATIC",L"",203,30,632,590,20,SS_LEFT);
         SendMessageW(status_label,WM_SETFONT,(WPARAM)small_font,TRUE);
         status(locate_engine()?L"Engine ready. Pair your console in chiaki-ng on first use.":L"First use: Open streaming client will offer the official engine download.");
         return 0;
     }
+    case UPDATE_FOUND:updateLayout();if(wparam)updateNotify();else updateOffer();return 0;
+    case UPDATE_READY:updateLaunchReady=TRUE;return 0;
+    case DONE:busy=FALSE;updateLayout();if(updateLaunchReady){updateLaunchReady=FALSE;updateBeginInstall();}else if(updateInstallRequested){updateInstallRequested=FALSE;start(UPDATE_DOWNLOAD);}return 0;
     case WM_COMMAND:
+        if(LOWORD(wparam)==UPDATE_CHECK){updateCommand();return 0;}
         if (HIWORD(wparam)==BN_CLICKED) switch(LOWORD(wparam)) {
             case ID_OPEN:open_client(window);break;case ID_GUIDE:open_guide(window);break;
             case ID_CONVERT:convert_id();break;case ID_COPY:copy_id(window);break;
-            case ID_ABOUT:MessageBoxW(window,L"Noctra Link 1.0.1\nBy Solitary\n\nA Windows launcher and setup companion for chiaki-ng.\nThe unmodified chiaki-ng client provides registration, video, audio and controls.\n\nLauncher: MIT license.\nchiaki-ng: upstream AGPL license with its OpenSSL exception.\nSee THIRD_PARTY_NOTICES.md and licenses/ for details.\n\nIndependent project; not affiliated with Sony or chiaki-ng.",L"About Noctra Link",MB_OK|MB_ICONINFORMATION);break;
+            case ID_ABOUT:MessageBoxW(window,L"Noctra Link 1.1.0\nBy Solitary\n\nA Windows launcher and setup companion for chiaki-ng.\nThe unmodified chiaki-ng client provides registration, video, audio and controls.\n\nLauncher: MIT license.\nchiaki-ng: upstream AGPL license with its OpenSSL exception.\nSee THIRD_PARTY_NOTICES.md and licenses/ for details.\n\nIndependent project; not affiliated with Sony or chiaki-ng.",L"About Noctra Link",MB_OK|MB_ICONINFORMATION);break;
         }
         if (LOWORD(wparam)==201 && HIWORD(wparam)==EN_CHANGE) SetWindowTextW(output,L"");
         return 0;
@@ -170,6 +190,7 @@ static LRESULT CALLBACK window_proc(HWND window,UINT message,WPARAM wparam,LPARA
     case WM_CTLCOLOREDIT: SetTextColor((HDC)wparam,RGB(232,241,255));SetBkColor((HDC)wparam,RGB(12,21,36));return (LRESULT)input_brush;
     case WM_ERASEBKGND:return 1;
     case WM_TIMER:
+        if(wparam==2&&!busy&&!engine_setup_process){updateQuiet=TRUE;start(UPDATE_CHECK);return 0;}
         if (wparam==1 && engine_setup_process && WaitForSingleObject(engine_setup_process,0)==WAIT_OBJECT_0) {
             DWORD code=1;GetExitCodeProcess(engine_setup_process,&code);CloseHandle(engine_setup_process);engine_setup_process=NULL;
             KillTimer(window,1);EnableWindow(GetDlgItem(window,ID_OPEN),TRUE);
@@ -178,15 +199,15 @@ static LRESULT CALLBACK window_proc(HWND window,UINT message,WPARAM wparam,LPARA
         }
         return 0;
     case WM_PAINT:paint(window);return 0;
-    case WM_CLOSE:DestroyWindow(window);return 0;
+    case WM_CLOSE:if(busy||libraryDialogOpen){MessageBoxW(window,L"Please wait for the update operation to finish.",L"Noctra",MB_OK);return 0;}DestroyWindow(window);return 0;
     case WM_DESTROY:
         if (engine_setup_process) {CloseHandle(engine_setup_process);engine_setup_process=NULL;}
-        PostQuitMessage(0);return 0;
+        KillTimer(window,2);PostQuitMessage(0);return 0;
     }
     return DefWindowProcW(window,message,wparam,lparam);
 }
 int WINAPI wWinMain(HINSTANCE current,HINSTANCE previous,LPWSTR command,int show) {
-    (void)previous;(void)command;instance=current;SetProcessDPIAware();
+    (void)previous;(void)command;instance=current;int argc=0;wchar_t**argv=CommandLineToArgvW(GetCommandLineW(),&argc);if(argc>1&&!wcscmp(argv[1],L"--apply-update")){int code=updateApply(argc,argv);LocalFree(argv);return code;}LocalFree(argv);SetProcessDPIAware();
     HDC screen=GetDC(NULL);dpi=GetDeviceCaps(screen,LOGPIXELSX);ReleaseDC(NULL,screen);
     DWORD length=GetModuleFileNameW(NULL,root_dir,MAX_APP_PATH);
     if (!length || length>=MAX_APP_PATH) return 1;
@@ -204,7 +225,7 @@ int WINAPI wWinMain(HINSTANCE current,HINSTANCE previous,LPWSTR command,int show
     RECT size={0,0,px(760),px(695)};DWORD style=WS_OVERLAPPED|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX;AdjustWindowRect(&size,style,FALSE);
     HWND window=CreateWindowExW(0,type.lpszClassName,L"Noctra Link - By Solitary",style,CW_USEDEFAULT,CW_USEDEFAULT,size.right-size.left,size.bottom-size.top,NULL,NULL,current,NULL);
     if (!window) return 1;
-    ShowWindow(window,show);UpdateWindow(window);
+    ShowWindow(window,show);UpdateWindow(window);updateQuiet=TRUE;start(UPDATE_CHECK);
     MSG message;int result;
     while ((result=GetMessageW(&message,NULL,0,0))>0) {if (!IsDialogMessageW(window,&message)) {TranslateMessage(&message);DispatchMessageW(&message);}}
     DeleteObject(normal_font);DeleteObject(title_font);DeleteObject(heading_font);DeleteObject(small_font);DeleteObject(mono_font);

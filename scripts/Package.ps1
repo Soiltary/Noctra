@@ -1,6 +1,6 @@
 param(
     [string]$Executable = (Join-Path (Split-Path -Parent $PSScriptRoot) 'build/Release/NoctraLink.exe'),
-    [string]$Version = '1.0.1'
+    [string]$Version = '1.1.0'
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
