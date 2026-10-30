@@ -1,0 +1,15 @@
+{
+  "name": "noctra-link-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "deploy": "node deploy.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "4.156.0"
+  }
+}

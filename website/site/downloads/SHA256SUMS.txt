@@ -1,0 +1,3 @@
+a3c46ab04f6b1f1889b8dfddd03ae91df442bcd92524b9aa5691fb0db9b00ac9  Noctra-Windows-x64.zip
+a3c46ab04f6b1f1889b8dfddd03ae91df442bcd92524b9aa5691fb0db9b00ac9  Noctra-Windows-x64-v1.1.0.zip
+ebb2cc72fe7ca0307d8a230106458e197573b2a908959fae74e5912fe6884cc8  Noctra-Windows-x64-v1.1.0.exe

@@ -1,0 +1,10 @@
+{
+  "old_origin": "https://noctra-link.soltairy.chatgpt.site",
+  "new_origin": "https://noctra-link.pages.dev",
+  "sites_version": 9,
+  "sites_source_commit": "e0497ff12a94d72e70997e1ae883eb3a0df2c289",
+  "cloudflare_account_id": "f9b1e5fd6056a136b90ced1f00b53bd9",
+  "project": "noctra-link",
+  "preserve_old_site": true,
+  "downloads": "Original URLs/bytes retained; native updater endpoints untouched"
+}
