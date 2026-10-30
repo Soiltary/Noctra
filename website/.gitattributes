@@ -1,0 +1,2 @@
+# Preserve published static assets byte-for-byte across Windows and ZIP clones.
+site/** -text
